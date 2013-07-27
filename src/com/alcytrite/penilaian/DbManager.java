@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -33,8 +34,8 @@ public class DbManager extends SQLiteOpenHelper {
 
 
 	public static final String[] COLUMNS_MURID = { MURID_ID, MURID_NAME, MURID_ADDRESS };
-	public static final String[] COLUMNS_MATAPELAJARAN = { MATAPELAJARAN_ID, MATAPELAJARAN_SUBJECT};
-	public static final String[] COLUMNS_NILAI = { NILAI_ID, NILAI_MURID,NILAI_MATAPELAJARAN,NILAI_NILAI,  };
+	public static final String[] COLUMNS_MATAPELAJARAN = { MATAPELAJARAN_ID, MATAPELAJARAN_SUBJECT };
+	public static final String[] COLUMNS_NILAI = { NILAI_ID, NILAI_MURID, NILAI_MATAPELAJARAN, NILAI_NILAI };
 
 
 	private static final String TAG = "DbManager";
@@ -52,9 +53,10 @@ public class DbManager extends SQLiteOpenHelper {
 			+ MATAPELAJARAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
 			+ MATAPELAJARAN_SUBJECT + " TEXT  " 
 			+ " );  " 
-			+ "INSERT INTO " + TABLE_MATAPELAJARAN + "( "+ MATAPELAJARAN_SUBJECT + ") values " 
-			+ "('PHP') , ('C') , ('JAVA') , ('jQuery');"
+			
 	;
+	
+	public static final String INSERT_TABLE_MATAPELAJARAN = " INSERT INTO " + TABLE_MATAPELAJARAN +" VALUES ('PHP','C++','JAVA')";
 	
 	public static final String CREATE_TABLE_NILAI = " CREATE TABLE " + TABLE_NILAI
 			+ " ( " 
@@ -65,7 +67,7 @@ public class DbManager extends SQLiteOpenHelper {
 			+ " ); "
 	;
 
-	public static final String CREATE_DATABASE = CREATE_TABLE_MURID + CREATE_TABLE_MATAPELAJARAN + CREATE_TABLE_NILAI ;
+	public static final String CREATE_DATABASE = CREATE_TABLE_MATAPELAJARAN + CREATE_TABLE_NILAI + CREATE_TABLE_MURID   ;
 
 
 	public DbManager(Context context) {
@@ -76,7 +78,19 @@ public class DbManager extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL(CREATE_DATABASE);
+		try {
+
+			db.execSQL(CREATE_TABLE_MATAPELAJARAN);
+			db.execSQL(CREATE_TABLE_NILAI);
+			db.execSQL(CREATE_TABLE_MURID);
+			db.execSQL(INSERT_TABLE_MATAPELAJARAN);
+			
+	    }
+	    catch(SQLiteException e) {
+	        Log.e("createerr",e.toString());
+	    }
+
+		
 
 	}
 
@@ -86,6 +100,9 @@ public class DbManager extends SQLiteOpenHelper {
 		Log.w(TAG,
 				"PLEASE BE CONCERN , THE DATABASE VERSION WILL CHANGE FROM VERSION "
 						+ oldVersion + " TO VERSION " + newVersion);
+		db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_MATAPELAJARAN);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_NILAI);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_MURID);
 		onCreate(db);
 	}
 	
@@ -273,5 +290,77 @@ public class DbManager extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(sql,null);
 		return cursor.getCount();
 	}
+	
+	//Get Single Murid
+	public Matapelajaran getMatapelajaran(int id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		String selection = MURID_ID + "=?";
+		String[] selectionArgs = new String[] { String.valueOf(id) };
+		String groupBy = null;
+		String having = null;
+		String orderBy = null;
+		
+		Cursor cursor = db.query(TABLE_MATAPELAJARAN, COLUMNS_MATAPELAJARAN, selection, selectionArgs,
+				groupBy, having, orderBy);
+		if (cursor != null)
+			cursor.moveToFirst();
 
+		Matapelajaran matapelajaran = new Matapelajaran(
+				cursor.getInt(0),
+				cursor.getString(1)
+				);
+		
+		return matapelajaran;
+	}
+
+	//get all Murid
+		public List<Matapelajaran> getAllMatapelajaran(){
+			List<Matapelajaran> matapelajaran = new ArrayList<Matapelajaran>();
+			String sql = "SELECT * FROM " + TABLE_MATAPELAJARAN;
+			
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.rawQuery(sql, null);
+			if(cursor.moveToFirst()){
+				do{
+					Matapelajaran list = new Matapelajaran();
+					list.setId(cursor.getInt(0));
+					list.setSubject(cursor.getString(1));
+					matapelajaran.add(list);
+				} while (cursor.moveToNext());
+			};
+			
+			return matapelajaran;
+		}
+		
+		//add MATAPELAJARAN
+		public void addMatapelajaran(Matapelajaran matapelajaran){
+			
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put(MATAPELAJARAN_SUBJECT, matapelajaran.getSubject());
+			db.insert(TABLE_MATAPELAJARAN, null, values);
+			db.close();
+		}
+		
+		//update Matapelajaran
+		public void updateMatapelajaran(Matapelajaran matapelajaran){
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
+			
+			values.put(MATAPELAJARAN_SUBJECT, matapelajaran.getSubject());
+			String whereClause = MATAPELAJARAN_ID +"=?";
+			String [] whereArgs = new String[] {String.valueOf(matapelajaran.getId())};
+			db.update(TABLE_MATAPELAJARAN, values, whereClause, whereArgs);		
+			db.close();
+		}
+		
+		// delete Matapelajaran 
+		public void deleteMatapelajaran(Matapelajaran matapelajaran){
+			SQLiteDatabase db = this.getWritableDatabase();
+			String whereClause = MATAPELAJARAN_ID +"=?";
+			String [] whereArgs = new String[] {String.valueOf(matapelajaran.getId())};
+			db.delete(TABLE_MATAPELAJARAN, whereClause, whereArgs);
+		}
+		
+	
 }

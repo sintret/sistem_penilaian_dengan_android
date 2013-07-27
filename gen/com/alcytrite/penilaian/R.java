@@ -955,7 +955,7 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040013;
         public static final int abs__title=0x7f04001b;
         public static final int abs__up=0x7f04000b;
-        public static final int action_settings=0x7f040043;
+        public static final int action_settings=0x7f040045;
         public static final int addBtn=0x7f040037;
         public static final int address=0x7f04003e;
         public static final int addressAdd=0x7f040035;
@@ -976,6 +976,8 @@ containing a value of this type.
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
+        public static final int subject=0x7f040044;
+        public static final int subjectAdd=0x7f040043;
         public static final int tabMode=0x7f040003;
         public static final int tabel_layout=0x7f04003a;
         public static final int table_row=0x7f04003b;

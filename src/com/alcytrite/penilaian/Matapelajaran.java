@@ -18,6 +18,9 @@ public class Matapelajaran {
 	public int getId(){
 		return this.id;
 	}
+	public String getIdtoString(){
+		return ""+this.id;
+	}
 	public void setSubject(String subject){
 		this.subject=subject;
 	}

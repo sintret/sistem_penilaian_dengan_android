@@ -21,13 +21,10 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.SubMenu;
 
-
-public class MainActivity extends SherlockActivity {
-
+public class PelajaranActivity extends SherlockActivity {
 	private SubMenu mGoItem;
-	public WebView webview;
-	EditText nameAdd, addressAdd, idAdd;
-	TextView name, address, no;
+	EditText subjectAdd, idAdd;
+	TextView subject,no;
 	TableLayout table_layout;
 	Button addBtn, updateBtn;
 	DbManager db;
@@ -38,7 +35,7 @@ public class MainActivity extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_pelajaran);
 
 		ActionBar ab = getSupportActionBar();
 		ab.setBackgroundDrawable(getApplicationContext().getResources()
@@ -57,11 +54,9 @@ public class MainActivity extends SherlockActivity {
 		
 		// TODO Auto-generated method stub
 		idAdd = (EditText) findViewById(R.id.idAdd);
-		nameAdd = (EditText) findViewById(R.id.nameAdd);
-		addressAdd = (EditText) findViewById(R.id.addressAdd);
+		subjectAdd = (EditText) findViewById(R.id.subjectAdd);
 		no = (TextView) findViewById(R.id.no);
-		name = (TextView) findViewById(R.id.name);
-		address = (TextView) findViewById(R.id.address);
+		subject = (TextView) findViewById(R.id.subject);
 		table_layout = (TableLayout) findViewById(R.id.tabel_layout);
 		addBtn = (Button) findViewById(R.id.addBtn);
 		updateBtn = (Button) findViewById(R.id.updateBtn);
@@ -74,6 +69,7 @@ public class MainActivity extends SherlockActivity {
 	{
 		// TODO Auto-generated method stub
 		// Button add
+
 		addBtn.setOnClickListener(new OnClickListener() 
 		{
 
@@ -81,15 +77,12 @@ public class MainActivity extends SherlockActivity {
 			public void onClick(View v) 
 			{
 				// TODO Auto-generated method stub
-				String myName = nameAdd.getText().toString();
-				String myAddress = addressAdd.getText().toString();
-				Murid murid = new Murid();
-				murid.setName(myName);
-				murid.setAddress(myAddress);
+				String mySubject = subjectAdd.getText().toString();
+				Matapelajaran matapelajaran = new Matapelajaran();
+				matapelajaran.setSubject(mySubject);
 				
-				Toast.makeText(	getBaseContext(),"anda memasukkan data name :   " + myName
-								+ " , address : " + myAddress, Toast.LENGTH_SHORT).show();
-				db.addMurid(murid);
+				Toast.makeText(	getBaseContext(),"anda memasukkan data Matapelajaran :   " + mySubject, Toast.LENGTH_SHORT).show();
+				db.addMatapelajaran(matapelajaran);
 				emptyField();
 				updateTable();
 				updateBtn.setVisibility(View.GONE);
@@ -103,20 +96,17 @@ public class MainActivity extends SherlockActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String myId = idAdd.getText().toString();
-				String myName = nameAdd.getText().toString();
-				String myAddress = addressAdd.getText().toString();
+				String mySubject = subjectAdd.getText().toString();
 				// convert string to integer
 				
 				Integer theId = Integer.parseInt(myId);
 				
-				Murid murid = new Murid();
-				murid.setName(myName);
-				murid.setAddress(myAddress);
-				murid.setId(theId);
+				Matapelajaran matapelajaran = new Matapelajaran();
+				matapelajaran.setSubject(mySubject);
+				matapelajaran.setId(theId);
 				
-				Toast.makeText(getBaseContext(),"anda mengupdate data name :   " + myName
-								+ " , Address : " + myAddress + "Int : " + theId, Toast.LENGTH_SHORT).show();
-				db.updateMurid(murid);
+				Toast.makeText(getBaseContext(),"anda mengupdate data Matapelajaran :   " + mySubject, Toast.LENGTH_SHORT).show();
+				db.updateMatapelajaran(matapelajaran);
 				emptyField();
 				updateTable();
 				updateBtn.setVisibility(View.GONE);
@@ -124,14 +114,17 @@ public class MainActivity extends SherlockActivity {
 
 		});
 		
+	
+		
+		
 	}
 
 
 	private void emptyField() {
 		// TODO Auto-generated method stub
-		nameAdd.setText("");
-		addressAdd.setText("");
+		subjectAdd.setText("");
 	}
+	
 	
 	private void updateTable() 
 	{
@@ -141,13 +134,13 @@ public class MainActivity extends SherlockActivity {
 			table_layout.removeViewAt(1);
 		}
 
-		List<Murid> data = db.getAllMurid();
+		List<Matapelajaran> data = db.getAllMatapelajaran();
 
 		int i = 1;
-		for (Murid murid : data) 
+		for (Matapelajaran matapelajaran : data) 
 		{	
 			TableRow tableBaris = new TableRow(this);
-			final int primary = murid.getId();
+			final int primary = matapelajaran.getId();
 			String iString = String.valueOf(i).toString();
 
 			TextView idTxt = new TextView(this);
@@ -156,17 +149,11 @@ public class MainActivity extends SherlockActivity {
 			idTxt.setTextSize(18);
 			tableBaris.addView(idTxt);
 
-			TextView nameTxt = new TextView(this);
-			nameTxt.setText(murid.getName());
-			nameTxt.setTextColor(Color.BLACK);
-			nameTxt.setTextSize(18);
-			tableBaris.addView(nameTxt);
-
-			TextView addressTxt = new TextView(this);
-			addressTxt.setText(murid.getAddress());
-			addressTxt.setTextColor(Color.BLACK);
-			addressTxt.setTextSize(18);
-			tableBaris.addView(addressTxt);
+			TextView pelajaranTxt = new TextView(this);
+			pelajaranTxt.setText(matapelajaran.getSubject());
+			pelajaranTxt.setTextColor(Color.BLACK);
+			pelajaranTxt.setTextSize(18);
+			tableBaris.addView(pelajaranTxt);
 			
 			Button upBtn = new Button(this);
 			upBtn.setText("Update");
@@ -175,7 +162,6 @@ public class MainActivity extends SherlockActivity {
 			Button delBtn = new Button(this);
 			delBtn.setText("Delete");
 			tableBaris.addView(delBtn);
-			
 			
 			upBtn.setOnClickListener(new OnClickListener()
 			{
@@ -186,10 +172,9 @@ public class MainActivity extends SherlockActivity {
 					Toast.makeText(getBaseContext(), "values :" + primary ,
 							Toast.LENGTH_SHORT).show();
 
-					Murid baris = db.getMurid(primary);
+					Matapelajaran baris = db.getMatapelajaran(primary);
 					idAdd.setText(baris.getIdtoString());
-					nameAdd.setText(baris.getName());
-					addressAdd.setText(baris.getAddress());
+					subjectAdd.setText(baris.getSubject());
 					updateBtn.setVisibility(View.VISIBLE);
 				}
 								
@@ -205,15 +190,15 @@ public class MainActivity extends SherlockActivity {
 					Toast.makeText(getBaseContext(), "Delete :" + primary ,
 							Toast.LENGTH_SHORT).show();
 
-					Murid murid = db.getMurid(primary);
-					db.deleteMurid(murid);
+					Matapelajaran matapelajaran = db.getMatapelajaran(primary);
+					db.deleteMatapelajaran(matapelajaran);
 					emptyField();
 					updateTable();
 					
 				}
 								
 			});
-
+	
 			
 			table_layout.addView(tableBaris);
 
@@ -228,9 +213,7 @@ public class MainActivity extends SherlockActivity {
 	
 	}
 	
-	
-	
-	
+
 	
 	
 	@SuppressLint("InlinedApi")
@@ -258,26 +241,26 @@ public class MainActivity extends SherlockActivity {
 
 		switch (item.getItemId()) {
 		case GO_ITEM_ID:
-			Toast.makeText(MainActivity.this, "Please Select menu list ",
+			Toast.makeText(PelajaranActivity.this, "Please Select menu list ",
 					Toast.LENGTH_SHORT).show();
 			break;
 		case R.style.Theme_Sherlock:
-			Toast.makeText(MainActivity.this, "Home",
+			Toast.makeText(PelajaranActivity.this, "Home",
 					Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(this,MainActivity.class);
+			startActivity(intent);
+
 			break;
 		case R.style.Theme_Sherlock_Light:
-			Toast.makeText(MainActivity.this, "Murid",
+			Toast.makeText(PelajaranActivity.this, "Murid",
 					Toast.LENGTH_SHORT).show();
 			break;
 		case R.style.Theme_Sherlock_Light_DarkActionBar:
-			Toast.makeText(MainActivity.this, "Matapelajaran",
+			Toast.makeText(PelajaranActivity.this, "Matapelajaran",
 					Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(this,PelajaranActivity.class);
-			startActivity(intent);
-			
 			break;
 		case R.style.Theme_Sherlock_Light_NoActionBar:
-			Toast.makeText(MainActivity.this, "Matapelajaran", Toast.LENGTH_LONG)
+			Toast.makeText(PelajaranActivity.this, "Matapelajaran", Toast.LENGTH_LONG)
 					.show();
 			super.finish();
 			break;
@@ -286,5 +269,7 @@ public class MainActivity extends SherlockActivity {
 
 		return true;
 	}
-
+	
+	
 }
+

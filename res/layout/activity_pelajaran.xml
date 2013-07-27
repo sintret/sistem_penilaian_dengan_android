@@ -17,16 +17,12 @@
             android:hint="id" />
 
         <EditText
-            android:id="@+id/nameAdd"
+            android:id="@+id/subjectAdd"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Silahkan masukkan nama" />
+            android:hint="Silahkan masukkan Matapelajaran" />
 
-        <EditText
-            android:id="@+id/adressAdd"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Masukkan Alamat" />
+       
     </LinearLayout>
 
     <LinearLayout
@@ -45,12 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Update Row" />
-
-        <Button
-            android:id="@+id/deleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete Row" />
     </LinearLayout>
 
     <View
@@ -61,42 +51,44 @@
 
     <TableLayout
         android:id="@+id/tabel_layout"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <TableRow
             android:id="@+id/table_row"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#0000FF"
-           >
+            android:background="#006600" >
 
             <TextView
                 android:id="@+id/no"
                 android:layout_width="50dip"
                 android:layout_height="wrap_content"
-                android:background="#0000FF"
-                android:text="Id"
-                android:textColor="#FFFFFFFF"
-                android:textSize="20sp" />
+                android:text="No"
+                android:textColor="#FFFFFFFF" />
 
             <TextView
-                android:id="@+id/name"
-                android:layout_width="150dip"
+                android:id="@+id/subject"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000FF"
                 android:text="Nama"
-                android:textColor="#FFFFFFFF"
-                android:textSize="20sp" />
+                android:textColor="#FFFFFFFF" />
 
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="150dip"
+          
+
+            <Button
+                android:id="@+id/imageEdit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#0000FF"
-                android:text="Hoby"
-                android:textColor="#FFFFFFFF"
-                android:textSize="20sp" />
+                android:text="Update"
+                android:textColor="#FFFFFFFF" />
+
+            <Button
+                android:id="@+id/imageDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="#FFFFFFFF" />
         </TableRow>
     </TableLayout>
 
